@@ -5,7 +5,6 @@ import registerServiceWorker from './registerServiceWorker'
 
 import 'reset-css'
 import 'font-awesome/css/font-awesome.css'
-import './index.css'
 
 import * as store from './store/configureStore'
 import router from './router'

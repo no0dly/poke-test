@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import HomepageTable from './HomepageTable'
+import HomepageList from './HomepageList'
 
 import * as actions from '../../actions'
 
@@ -15,7 +15,7 @@ export class Homepage extends Component {
   render() {
     return (
       <div>
-        <HomepageTable initialItemsPerPage={ initialItemsPerPage } />
+        <HomepageList initialItemsPerPage={ initialItemsPerPage } />
       </div>
     )
   }

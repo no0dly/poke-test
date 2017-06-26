@@ -1,7 +1,7 @@
-export const searchReducer = (state = false, action) => {
+export const pokemonListReducer = (state = [], action) => {
   switch (action.type) {
-    case 'TOGGLE_SEARCH':
-      return !state
+    case 'SET_INITIAL_POKE_LIST':
+      return [...action.list]
     default:
       return state
   }

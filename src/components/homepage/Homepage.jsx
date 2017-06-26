@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-const Homepage = (props) => {
-  return (
-    <div>
-      homepage
-    </div>
-  )
+import HomepageTable from './HomepageTable'
+
+import * as actions from '../../actions'
+
+const initialItemsPerPage = 10
+
+export class Homepage extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch(actions.fetchPokeNamesList(initialItemsPerPage))
+  }
+  render() {
+    return (
+      <div>
+        <HomepageTable initialItemsPerPage={ initialItemsPerPage } />
+      </div>
+    )
+  }
 }
 
-export default Homepage
+export default connect()(Homepage)

@@ -3,18 +3,26 @@ import pokeApi from '../api/http'
 export const fetchPokeNamesList = (initialItemsPerPage) => {
   return (dispatch, getState) => {
     pokeApi.fetchData().then((response) => {
-      let pokeNamesList = response.data.objects[0].pokemon
+      let pokeNamesList = response.data.results
       return pokeNamesList.map((pokemon, idx) => {
         if (idx > initialItemsPerPage - 1) { return false }
-        pokeApi.request(pokemon.resource_uri)
+        pokeApi.request(pokemon.url)
         .then((description) => {
           const reqData = description.data
-          pokeNamesList[idx].type = reqData.types[0].name
-          pokeNamesList[idx].atk = reqData.sp_atk
-          pokeNamesList[idx].def = reqData.sp_def
-          pokeNamesList[idx].speed = reqData.speed
-          pokeNamesList[idx].pkdx_id = reqData.pkdx_id
-          if(idx === initialItemsPerPage - 1) {
+
+          pokeNamesList[idx].types = reqData.types.map(
+            (type) => {
+              return type.type.name
+            }).join(', ')
+
+          reqData.stats.map((stat) => {
+            pokeNamesList[idx][stat.stat.name] = stat.base_stat
+          })
+
+          pokeNamesList[idx].id = reqData.id
+          pokeNamesList[idx].image = reqData.sprites.front_default
+
+          if (idx === initialItemsPerPage - 1) {
             dispatch(setPokeList(pokeNamesList))
           }
         })
@@ -31,17 +39,24 @@ export const startUpdatePokeList = (page, sizePerPage) => {
 
     return pokeNamesList.map((pokemon, idx) => {
       if (idx > minNumber - 1 && idx < maxNumber) {
-        if (!pokeNamesList[idx].pkdx_id) {
-          pokeApi.request(pokemon.resource_uri)
+        if (!pokeNamesList[idx].id) {
+          pokeApi.request(pokemon.url)
           .then((description) => {
             const reqData = description.data
-            pokeNamesList[idx].type = reqData.types[0].name
-            pokeNamesList[idx].atk = reqData.sp_atk
-            pokeNamesList[idx].def = reqData.sp_def
-            pokeNamesList[idx].speed = reqData.speed
-            pokeNamesList[idx].pkdx_id = reqData.pkdx_id
 
-              dispatch(updatePokeList(pokeNamesList))
+            pokeNamesList[idx].types = reqData.types.map(
+              (type) => {
+                return type.type.name
+              }).join(', ')
+
+            reqData.stats.map((stat) => {
+              pokeNamesList[idx][stat.stat.name] = stat.base_stat
+            })
+
+            pokeNamesList[idx].id = reqData.id
+            pokeNamesList[idx].image = reqData.sprites.front_default
+
+            dispatch(updatePokeList(pokeNamesList))
           })
         }
       }

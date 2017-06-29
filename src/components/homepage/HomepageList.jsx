@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-// import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
+import ReactPaginate from 'react-paginate'
+
 import styled from 'styled-components'
 
 import api from '../../api'
 
 import HomepageListItem from './HomepageListItem'
 
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
-
 import * as actions from '../../actions'
 
 class HomepageList extends Component {
-  imageFormatter(cell, row) {
-    return `<img src=${cell} alt='image' />`
+  constructor(props) {
+    super(props)
+
   }
 
-  onPageChange(page, sizePerPage) {
+  handlePageClick(data) {
     const { dispatch } = this.props
-    dispatch(actions.startUpdatePokeList(page, sizePerPage))
+    const pageIndex = data
+
+    // dispatch(actions.updatePage(pageIndex))
   }
 
   renderItems() {
@@ -33,13 +34,28 @@ class HomepageList extends Component {
   }
 
   render() {
-    const { pokeList, initialItemsPerPage } = this.props
+    const { pokeList } = this.props
+    const initialItemsPerPage = 10
     if (pokeList.length < 1) { return false }
 
     return (
-      <ul className="columns is-multiline">
-        { this.renderItems() }
-      </ul>
+      <div>
+        <ul className="columns is-multiline">
+          { this.renderItems() }
+        </ul>
+        <ReactPaginate
+          nextLabel={ 'next' }
+          breakLabel={ <a href=''>...</a> }
+          breakClassName={ 'break-me' }
+          pageCount={ initialItemsPerPage }
+          marginPagesDisplayed={ 2 }
+          pageRangeDisplayed={ 5 }
+          onPageChange={ this.handlePageClick }
+          containerClassName={ 'pagination' }
+          subContainerClassName={ 'pages pagination' }
+          activeClassName={ 'active' }
+        />
+      </div>
     )
   }
 }

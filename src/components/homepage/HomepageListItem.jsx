@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import styled from 'styled-components'
 
-
 import * as actions from '../../actions'
 
 class HomepageListItem extends Component {

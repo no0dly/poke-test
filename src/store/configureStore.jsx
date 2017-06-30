@@ -1,12 +1,19 @@
 import * as redux from 'redux'
 import thunk from 'redux-thunk'
 
-import { pokemonListReducer, pageReducer } from '../reducers'
+import {
+  pokemonListReducer,
+  pageReducer,
+  itemsPerPageReducer,
+  searchTextReducer
+} from '../reducers'
 
 export const configure = (initialState = {}) => {
   const reducer = redux.combineReducers({
     pokeList: pokemonListReducer,
-    currentPage: pageReducer
+    currentPage: pageReducer,
+    itemsPerPage: itemsPerPageReducer,
+    searchText: searchTextReducer
   })
 
   const store = redux.createStore(reducer, initialState, redux.compose(

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 
-import styled from 'styled-components'
+// import styled from 'styled-components'
 
 import api from '../../api'
 
@@ -18,17 +18,16 @@ class HomepageList extends Component {
   }
 
   renderItems() {
-    const itemsPerList = 10
-    const { pokeList, currentPage } = this.props
+    const { pokeList, currentPage, itemsPerPage, searchText } = this.props
 
-    return api.filter(pokeList, '', currentPage, itemsPerList).map((item, idx) => {
-      return <HomepageListItem { ...item } key={ item.id || idx } />
+    return api.filter(pokeList, searchText, currentPage, itemsPerPage).map((item, idx) => {
+      return <HomepageListItem { ...item } key={ item.id || Math.random() } />
     })
   }
 
   render() {
-    const { pokeList } = this.props
-    const initialItemsPerPage = 10
+    const { pokeList, itemsPerPage } = this.props
+    const pageCount = Math.ceil(pokeList.length / itemsPerPage)
     if (pokeList.length < 1) { return false }
 
     return (
@@ -43,7 +42,7 @@ class HomepageList extends Component {
                 nextLabel={ 'next' }
                 breakLabel={ <a href=''>...</a> }
                 breakClassName={ 'break-me' }
-                pageCount={ initialItemsPerPage }
+                pageCount={ pageCount }
                 marginPagesDisplayed={ 2 }
                 pageRangeDisplayed={ 5 }
                 onPageChange={ this.handlePageClick.bind(this) }
@@ -60,21 +59,23 @@ class HomepageList extends Component {
   }
 }
 
-const Wrap = styled.ul`
-  .row {
-    margin: 0;
-  }
-  td {
-    vertical-align: middle!important;
-    text-align: center!important;
-  }
-`
+// const Wrap = styled.ul`
+//   .row {
+//     margin: 0;
+//   }
+//   td {
+//     vertical-align: middle!important;
+//     text-align: center!important;
+//   }
+// `
 
 export default connect(
   (state) => {
     return {
       pokeList: state.pokeList,
-      currentPage: state.currentPage
+      currentPage: state.currentPage,
+      itemsPerPage: state.itemsPerPage,
+      searchText: state.searchText
     }
   }
 )(HomepageList)

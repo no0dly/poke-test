@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import styled from 'styled-components'
 
-import * as actions from '../../actions'
+// import * as actions from '../../actions'
 
 class HomepageListItem extends Component {
   // imageFormatter(cell, row) {
@@ -17,7 +17,7 @@ class HomepageListItem extends Component {
   render() {
     // const { pokeList, initialItemsPerPage } = this.props
     // if (pokeList.length < 1) { return false }
-    const { image, name, types, attack,deffence, hp, speed } = this.props || ''
+    const { image, name, types, attack, defense, hp, speed } = this.props || ''
     return (
       <Item className="column is-one-quarter">
         <div className="card">
@@ -59,7 +59,7 @@ class HomepageListItem extends Component {
                       Deffence:
                     </td>
                     <td>
-                      { deffence }
+                      { defense }
                     </td>
                   </tr>
                   <tr>

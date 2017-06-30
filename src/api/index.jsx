@@ -1,8 +1,8 @@
 export default {
   filter(arr, filterText = '', pageIndex = 1, itemsPerPage) {
     let filteredArr = arr
-    let minItemIndex = (pageIndex) * (itemsPerPage ) - itemsPerPage
-    let maxItemIndex = (pageIndex) * (itemsPerPage )
+    let minItemIndex = pageIndex * itemsPerPage - itemsPerPage
+    let maxItemIndex = pageIndex * itemsPerPage
 
     // filter by filter text
     if (filterText.length > 0) {

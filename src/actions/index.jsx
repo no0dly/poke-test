@@ -38,6 +38,7 @@ export const startUpdatePokeList = (page, sizePerPage) => {
     const maxNumber = page * sizePerPage
     const pokeNamesList = getState().pokeList
     dispatch(updatePage(page))
+    dispatch(updateItemsPerPage(sizePerPage))
     return pokeNamesList.map((pokemon, idx) => {
       if (idx > minNumber - 1 && idx < maxNumber) {
         if (!pokeNamesList[idx].id) {
@@ -89,5 +90,19 @@ export const updatePage = (page) => {
 export const resetPage = () => {
   return {
     type: 'RESET_PAGE'
+  }
+}
+
+export const updateItemsPerPage = (perPage) => {
+  return {
+    type: 'UPDATE_ITEMS_PER_PAGE',
+    perPage
+  }
+}
+
+export const setSearchText = (searchText) => {
+  return {
+    type: 'SET_SEARCH_TEXT',
+    searchText
   }
 }

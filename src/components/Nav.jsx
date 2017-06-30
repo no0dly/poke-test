@@ -1,63 +1,74 @@
 import React from 'react'
 import { Link } from 'react-router'
 import FontAwesome from 'react-fontawesome'
+import { connect } from 'react-redux'
 
 import styled from 'styled-components'
 
+import * as actions from '../actions'
+
 const Nav = (props) => {
+  const onChange = (e) => {
+    props.dispatch(actions.startUpdatePokeList(1, e.target.value))
+  }
+
+  const onSearchChange = (e) => {
+    props.dispatch(actions.setSearchText(e.target.value))
+  }
   return (
-    <Wrap>
-      <Container>
-        <Logo to="/">
-          <FontAwesome
-            name="ravelry"
-            size="2x"
-          />
-        </Logo>
-        <div>
-          <NavLink to="/">
-            Homepage
-          </NavLink>
-          <NavLink to="/graph">
-            Graph
-          </NavLink>
+    <nav className="nav has-shadow">
+      <div className="container">
+        <div className="nav-left">
+          <Link to="/" className="nav-item">
+            <FontAwesome
+              name="ravelry"
+              size="2x"
+            />
+          </Link>
+          <Link className="nav-item is-tab is-hidden-mobile is-active">Home</Link>
+          <SearchWrap className="field">
+            <p className="control">
+              <input
+                className="input is-primary"
+                type="search"
+                placeholder="search pokemon"
+                onChange={ onSearchChange } />
+            </p>
+          </SearchWrap>
         </div>
-      </Container>
-    </Wrap>
+        <span className="nav-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <div className="nav-right nav-menu">
+          <SelectWrap className="field">
+            <p className="control">
+              <span className="select">
+                <select defaultValue={ 10 } onChange={ onChange }>
+                  <option>5</option>
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                </select>
+              </span>
+            </p>
+          </SelectWrap>
+          <Link to="/" className="nav-item is-tab is-hidden-tablet is-active">Home</Link>
+          <a className="nav-item is-tab">Log out</a>
+        </div>
+      </div>
+    </nav>
   )
 }
 
-const Wrap = styled.div`
-  background: rgba(111, 185, 214, 0.65 );
+const SearchWrap = styled.div`
+  margin-top: 10px;
+  margin-left: 20px;
 `
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  align-items: center;
+const SelectWrap = styled.div`
+  margin-top: 10px;
 `
 
-const Logo = styled(Link)`
-  display: block;
-  color: #000;
-  transition: 0.3s;
-  &:hover {
-    color: #599979;
-  }
-`
-
-const NavLink = styled(Link)`
-  display: inline-block;
-  color: #000;
-  text-decoration: none;
-  transition: 0.3s;
-  padding: 20px;
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-`
-
-export default Nav
+export default connect()(Nav)

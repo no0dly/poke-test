@@ -8,3 +8,14 @@ export const pokemonListReducer = (state = [], action) => {
       return state
   }
 }
+
+export const pageReducer = (state = 1, action) => {
+  switch (action.type) {
+    case 'UPDATE_PAGE':
+      return action.page
+    case 'RESET PAGE':
+      return 0
+    default:
+      return state
+  }
+}

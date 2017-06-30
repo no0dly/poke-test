@@ -11,25 +11,18 @@ import HomepageListItem from './HomepageListItem'
 import * as actions from '../../actions'
 
 class HomepageList extends Component {
-  constructor(props) {
-    super(props)
-
-  }
-
   handlePageClick(data) {
     const { dispatch } = this.props
-    const pageIndex = data
-
-    // dispatch(actions.updatePage(pageIndex))
+    const pageIndex = data.selected + 1
+    dispatch(actions.startUpdatePokeList(pageIndex, 10))
   }
 
   renderItems() {
-    const pageNumber = 1
     const itemsPerList = 10
-    const { pokeList } = this.props
+    const { pokeList, currentPage } = this.props
 
-    return api.filter(pokeList, '', pageNumber, itemsPerList).map((item) => {
-      return <HomepageListItem { ...item } key={ item.id } />
+    return api.filter(pokeList, '', currentPage, itemsPerList).map((item, idx) => {
+      return <HomepageListItem { ...item } key={ item.id || idx } />
     })
   }
 
@@ -43,18 +36,25 @@ class HomepageList extends Component {
         <ul className="columns is-multiline">
           { this.renderItems() }
         </ul>
-        <ReactPaginate
-          nextLabel={ 'next' }
-          breakLabel={ <a href=''>...</a> }
-          breakClassName={ 'break-me' }
-          pageCount={ initialItemsPerPage }
-          marginPagesDisplayed={ 2 }
-          pageRangeDisplayed={ 5 }
-          onPageChange={ this.handlePageClick }
-          containerClassName={ 'pagination' }
-          subContainerClassName={ 'pages pagination' }
-          activeClassName={ 'active' }
-        />
+        <div className="columns">
+          <div className="column is-half is-offset-one-quarter">
+            <div className="pagination">
+              <ReactPaginate
+                nextLabel={ 'next' }
+                breakLabel={ <a href=''>...</a> }
+                breakClassName={ 'break-me' }
+                pageCount={ initialItemsPerPage }
+                marginPagesDisplayed={ 2 }
+                pageRangeDisplayed={ 5 }
+                onPageChange={ this.handlePageClick.bind(this) }
+                containerClassName={ 'pagination' }
+                subContainerClassName={ 'pages pagination' }
+                activeClassName={ 'is-current' }
+                pageLinkClassName={ 'pagination-link' }
+              />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -73,7 +73,8 @@ const Wrap = styled.ul`
 export default connect(
   (state) => {
     return {
-      pokeList: state.pokeList
+      pokeList: state.pokeList,
+      currentPage: state.currentPage
     }
   }
 )(HomepageList)

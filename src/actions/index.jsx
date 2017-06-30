@@ -106,3 +106,17 @@ export const setSearchText = (searchText) => {
     searchText
   }
 }
+
+export const listLengthSet = (listLength) => {
+  return {
+    type: 'SET_LIST_LENGTH',
+    listLength
+  }
+}
+
+export const listLengthUpdate = (listLength) => {
+  return {
+    type: 'UPDATE_LIST_LENGTH',
+    listLength
+  }
+}

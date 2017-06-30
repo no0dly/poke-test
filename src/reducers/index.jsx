@@ -39,3 +39,14 @@ export const searchTextReducer = (state = '', action) => {
       return state
   }
 }
+
+export const listLengthReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'SET_LIST_LENGTH':
+      return action.listLength
+    case 'UPDATE_LIST_LENGTH':
+      return action.listLength
+    default:
+      return state
+  }
+}

@@ -5,7 +5,8 @@ import {
   pokemonListReducer,
   pageReducer,
   itemsPerPageReducer,
-  searchTextReducer
+  searchTextReducer,
+  listLengthReducer
 } from '../reducers'
 
 export const configure = (initialState = {}) => {
@@ -13,7 +14,8 @@ export const configure = (initialState = {}) => {
     pokeList: pokemonListReducer,
     currentPage: pageReducer,
     itemsPerPage: itemsPerPageReducer,
-    searchText: searchTextReducer
+    searchText: searchTextReducer,
+    listLength: listLengthReducer
   })
 
   const store = redux.createStore(reducer, initialState, redux.compose(

@@ -3,6 +3,7 @@ export default {
     let filteredArr = arr
     let minItemIndex = pageIndex * itemsPerPage - itemsPerPage
     let maxItemIndex = pageIndex * itemsPerPage
+    let filteredArrLen
 
     // filter by filter text
     if (filterText.length > 0) {
@@ -11,9 +12,10 @@ export default {
         return name.indexOf(filterText.toLowerCase()) !== -1
       })
     }
+    filteredArrLen = filteredArr.length
     filteredArr = filteredArr.filter((item, idx) => {
       return (minItemIndex <= idx && maxItemIndex > idx)
     })
-    return filteredArr
+    return [filteredArr, filteredArrLen]
   }
 }

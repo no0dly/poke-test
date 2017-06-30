@@ -18,16 +18,22 @@ class HomepageList extends Component {
   }
 
   renderItems() {
-    const { pokeList, currentPage, itemsPerPage, searchText } = this.props
+    const { pokeList, currentPage, itemsPerPage, searchText, dispatch } = this.props
+    const filteredListArr = api.filter(pokeList, searchText, currentPage, itemsPerPage)
+    const filteredList = filteredListArr[0]
+    const filteredListLen = filteredListArr[1]
 
-    return api.filter(pokeList, searchText, currentPage, itemsPerPage).map((item, idx) => {
+    if (filteredListLen !== pokeList.length) {
+      dispatch(actions.listLengthUpdate(filteredListLen))
+    }
+    return filteredList.map((item, idx) => {
       return <HomepageListItem { ...item } key={ item.id || Math.random() } />
     })
   }
 
   render() {
-    const { pokeList, itemsPerPage } = this.props
-    const pageCount = Math.ceil(pokeList.length / itemsPerPage)
+    const { pokeList, itemsPerPage, listLength } = this.props
+    const pageCount = Math.ceil(listLength / itemsPerPage)
     if (pokeList.length < 1) { return false }
 
     return (
@@ -75,7 +81,8 @@ export default connect(
       pokeList: state.pokeList,
       currentPage: state.currentPage,
       itemsPerPage: state.itemsPerPage,
-      searchText: state.searchText
+      searchText: state.searchText,
+      listLength: state.listLength
     }
   }
 )(HomepageList)

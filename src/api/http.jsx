@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URL = 'http://pokeapi.co/'
+const URL = 'https://pokeapi.co/'
 
 export default {
   fetchData() {

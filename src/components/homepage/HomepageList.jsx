@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 
-// import styled from 'styled-components'
+import styled from 'styled-components'
 
 import api from '../../api'
 
@@ -18,22 +18,15 @@ class HomepageList extends Component {
   }
 
   renderItems() {
-    const { pokeList, currentPage, itemsPerPage, searchText, dispatch } = this.props
-    const filteredListArr = api.filter(pokeList, searchText, currentPage, itemsPerPage)
-    const filteredList = filteredListArr[0]
-    const filteredListLen = filteredListArr[1]
-
-    if (filteredListLen !== pokeList.length) {
-      dispatch(actions.listLengthUpdate(filteredListLen))
-    }
+    const { filteredList } = this.props
     return filteredList.map((item, idx) => {
       return <HomepageListItem { ...item } key={ item.id || Math.random() } />
     })
   }
 
   render() {
-    const { pokeList, itemsPerPage, listLength } = this.props
-    const pageCount = Math.ceil(listLength / itemsPerPage)
+    const { pokeList, itemsPerPage, filteredListLen } = this.props
+    const pageCount = Math.ceil(filteredListLen / itemsPerPage)
     if (pokeList.length < 1) { return false }
 
     return (
@@ -41,48 +34,51 @@ class HomepageList extends Component {
         <ul className="columns is-multiline">
           { this.renderItems() }
         </ul>
-        <div className="columns">
-          <div className="column is-half is-offset-one-quarter">
-            <div className="pagination">
-              <ReactPaginate
-                nextLabel={ 'next' }
-                breakLabel={ <a href=''>...</a> }
-                breakClassName={ 'break-me' }
-                pageCount={ pageCount }
-                marginPagesDisplayed={ 2 }
-                pageRangeDisplayed={ 5 }
-                onPageChange={ this.handlePageClick.bind(this) }
-                containerClassName={ 'pagination' }
-                subContainerClassName={ 'pages pagination' }
-                activeClassName={ 'is-current' }
-                pageLinkClassName={ 'pagination-link' }
-              />
-            </div>
-          </div>
-        </div>
+        <PaginationWrap className="columns">
+          <ReactPaginate
+            nextLabel={ 'Next' }
+            breakLabel={ <a href=''>...</a> }
+            breakClassName={ 'break-me' }
+            pageCount={ pageCount }
+            marginPagesDisplayed={ 2 }
+            pageRangeDisplayed={ 5 }
+            onPageChange={ this.handlePageClick.bind(this) }
+            containerClassName={ 'pagination' }
+            subContainerClassName={ 'pages pagination' }
+            activeClassName={ 'is-current' }
+            pageLinkClassName={ 'pagination-link' }
+          />
+      </PaginationWrap>
       </div>
     )
   }
 }
 
-// const Wrap = styled.ul`
-//   .row {
-//     margin: 0;
-//   }
-//   td {
-//     vertical-align: middle!important;
-//     text-align: center!important;
-//   }
-// `
-
-export default connect(
-  (state) => {
-    return {
-      pokeList: state.pokeList,
-      currentPage: state.currentPage,
-      itemsPerPage: state.itemsPerPage,
-      searchText: state.searchText,
-      listLength: state.listLength
-    }
+const PaginationWrap = styled.div`
+  margin: 20px 0;
+  justify-content: center;
+  .is-current a {
+    background-color: #00d1b2;
+    border-color: #00d1b2;
+    color: #fff;
   }
-)(HomepageList)
+`
+
+const mapStateToProps = (state) => {
+  const { pokeList, currentPage, itemsPerPage, searchText } = state
+
+  const filteredListArr = api.filter(pokeList, searchText, currentPage, itemsPerPage)
+  const filteredList = filteredListArr[0]
+  const filteredListLen = filteredListArr[1]
+
+  return {
+    pokeList,
+    currentPage,
+    itemsPerPage,
+    searchText,
+    filteredListLen,
+    filteredList
+  }
+}
+
+export default connect(mapStateToProps)(HomepageList)

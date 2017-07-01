@@ -5,25 +5,14 @@ import styled from 'styled-components'
 // import * as actions from '../../actions'
 
 class HomepageListItem extends Component {
-  // imageFormatter(cell, row) {
-  //   return `<img src=${cell} alt='image' />`
-  // }
-  //
-  // onPageChange(page, sizePerPage) {
-  //   const { dispatch } = this.props
-  //   dispatch(actions.startUpdatePokeList(page, sizePerPage))
-  // }
-
   render() {
-    // const { pokeList, initialItemsPerPage } = this.props
-    // if (pokeList.length < 1) { return false }
     const { image, name, types, attack, defense, hp, speed } = this.props || ''
     return (
       <Item className="column is-one-quarter">
         <div className="card">
           <div className="card-image">
             <figure className="image is-4by3">
-              <img src={ image } alt="Image" />
+              <Image image={image} />
             </figure>
           </div>
           <div className="card-content">
@@ -92,6 +81,17 @@ const Item = styled.li`
   .card-content {
     padding: 1.5rem 0;
   }
+`
+
+const Image = styled.div`
+  background-image: url('${(props) => props.image }')
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  background-repeat: no-repeat;
+  background-position: center;
 `
 
 export default HomepageListItem

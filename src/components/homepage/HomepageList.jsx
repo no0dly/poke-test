@@ -20,7 +20,7 @@ class HomepageList extends Component {
   renderItems() {
     const { filteredList } = this.props
     return filteredList.map((item, idx) => {
-      return <HomepageListItem { ...item } key={ item.id || Math.random() } />
+      return <HomepageListItem { ...item } key={ item.id } />
     })
   }
 
@@ -48,7 +48,7 @@ class HomepageList extends Component {
             activeClassName={ 'is-current' }
             pageLinkClassName={ 'pagination-link' }
           />
-      </PaginationWrap>
+        </PaginationWrap>
       </div>
     )
   }

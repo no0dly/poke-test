@@ -14,7 +14,7 @@ export const pageReducer = (state = 1, action) => {
     case 'UPDATE_PAGE':
       return action.page
     case 'RESET_PAGE':
-      return 0
+      return 1
     default:
       return state
   }

@@ -1,10 +1,12 @@
 import pokeApi from '../api/http'
+import pokeFilter from '../api'
 
 export const fetchPokeNamesList = (initialItemsPerPage) => {
   return (dispatch, getState) => {
     pokeApi.fetchData().then((response) => {
       let pokeNamesList = response.data.results
       return pokeNamesList.map((pokemon, idx) => {
+        pokeNamesList[idx].id = idx + 1
         if (idx > initialItemsPerPage - 1) { return false }
         pokeApi.request(pokemon.url)
         .then((description) => {
@@ -19,7 +21,6 @@ export const fetchPokeNamesList = (initialItemsPerPage) => {
             pokeNamesList[idx][stat.stat.name] = stat.base_stat
           })
 
-          pokeNamesList[idx].id = reqData.id
           pokeNamesList[idx].image = reqData.sprites.front_default
 
           if (idx === initialItemsPerPage - 1) {
@@ -37,11 +38,16 @@ export const startUpdatePokeList = (page, sizePerPage) => {
     const minNumber = (page * sizePerPage) - sizePerPage
     const maxNumber = page * sizePerPage
     const pokeNamesList = getState().pokeList
-    dispatch(updatePage(page))
-    dispatch(updateItemsPerPage(sizePerPage))
+    if (page !== getState().currentPage) {
+      dispatch(updatePage(page))
+    }
+    if (sizePerPage !== getState().itemsPerPage) {
+      dispatch(updateItemsPerPage(sizePerPage))
+    }
+
     return pokeNamesList.map((pokemon, idx) => {
       if (idx > minNumber - 1 && idx < maxNumber) {
-        if (!pokeNamesList[idx].id) {
+        if (!pokeNamesList[idx].types) {
           pokeApi.request(pokemon.url)
           .then((description) => {
             const reqData = description.data
@@ -54,8 +60,6 @@ export const startUpdatePokeList = (page, sizePerPage) => {
             reqData.stats.map((stat) => {
               pokeNamesList[idx][stat.stat.name] = stat.base_stat
             })
-
-            pokeNamesList[idx].id = reqData.id
             pokeNamesList[idx].image = reqData.sprites.front_default
 
             dispatch(updatePokeList(pokeNamesList))
@@ -97,6 +101,44 @@ export const updateItemsPerPage = (perPage) => {
   return {
     type: 'UPDATE_ITEMS_PER_PAGE',
     perPage
+  }
+}
+
+export const startSetSearchText = (searchText) => {
+  return (dispatch, getState) => {
+    const pokeList = getState().pokeList
+    let newPokeList = [...pokeList]
+
+    const page = getState().currentPage
+    const sizePerPage = getState().itemsPerPage
+
+    const filteredList = pokeFilter.filter(pokeList, searchText, page, sizePerPage)[0]
+
+    dispatch(setSearchText(searchText))
+
+    if (getState().currentPage !== 1) {
+      dispatch(resetPage())
+    }
+
+    filteredList.map((pokemon, idx) => {
+      if (!newPokeList[pokemon.id - 1].types) {
+        pokeApi.request(pokemon.url)
+        .then((description) => {
+          const reqData = description.data
+
+          newPokeList[pokemon.id - 1].types = reqData.types.map(
+            (type) => {
+              return type.type.name
+            }).join(', ')
+
+          reqData.stats.map((stat) => {
+            newPokeList[pokemon.id - 1][stat.stat.name] = stat.base_stat
+          })
+          newPokeList[pokemon.id - 1].image = reqData.sprites.front_default
+          dispatch(updatePokeList(newPokeList))
+        })
+      }
+    })
   }
 }
 

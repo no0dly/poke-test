@@ -12,7 +12,7 @@ class HomepageListItem extends Component {
         <div className="card">
           <div className="card-image">
             <figure className="image is-4by3">
-              <Image image={image} />
+              <Image image={ image } />
             </figure>
           </div>
           <div className="card-content">
@@ -84,7 +84,7 @@ const Item = styled.li`
 `
 
 const Image = styled.div`
-  background-image: url('${(props) => props.image }')
+  background-image: url('${(props) => props.image}')
   width: 100%;
   height: 100%;
   display: block;

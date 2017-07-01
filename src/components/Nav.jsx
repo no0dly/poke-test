@@ -13,7 +13,7 @@ const Nav = (props) => {
   }
 
   const onSearchChange = (e) => {
-    props.dispatch(actions.setSearchText(e.target.value))
+    props.dispatch(actions.startSetSearchText(e.target.value))
   }
   return (
     <nav className="nav has-shadow">

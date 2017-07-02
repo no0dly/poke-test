@@ -69,6 +69,9 @@ const SearchWrap = styled.div`
 
 const SelectWrap = styled.div`
   margin-top: 10px;
+  .select select {
+    min-width: 70px;
+  }
 `
 
 export default connect()(Nav)

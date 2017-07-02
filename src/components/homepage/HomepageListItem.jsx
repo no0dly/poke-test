@@ -6,13 +6,13 @@ import styled from 'styled-components'
 
 class HomepageListItem extends Component {
   render() {
-    const { image, name, types, attack, defense, hp, speed } = this.props || ''
+    const { image, name, types, attack, defense, hp, speed, id } = this.props || ''
     return (
       <Item className="column is-one-quarter">
         <div className="card">
           <div className="card-image">
             <figure className="image is-4by3">
-              <Image image={ image } />
+              <Image image={ image } id={ id } />
             </figure>
           </div>
           <div className="card-content">
@@ -84,7 +84,13 @@ const Item = styled.li`
 `
 
 const Image = styled.div`
-  background-image: url('${(props) => props.image}')
+  background-image: url('${(props) => {
+    if (props.image) {
+      return props.image
+    } else {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + props.id + '.png'
+    }
+  }}')
   width: 100%;
   height: 100%;
   display: block;

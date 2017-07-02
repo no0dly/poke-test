@@ -3,6 +3,7 @@ import pokeFilter from '../api'
 
 export const fetchPokeNamesList = (initialItemsPerPage) => {
   return (dispatch, getState) => {
+    dispatch(toggleLoader())
     pokeApi.fetchData().then((response) => {
       let pokeNamesList = response.data.results
       return pokeNamesList.map((pokemon, idx) => {
@@ -19,12 +20,14 @@ export const fetchPokeNamesList = (initialItemsPerPage) => {
 
           reqData.stats.map((stat) => {
             pokeNamesList[idx][stat.stat.name] = stat.base_stat
+            return true
           })
 
           pokeNamesList[idx].image = reqData.sprites.front_default
 
           if (idx === initialItemsPerPage - 1) {
             dispatch(setPokeList(pokeNamesList))
+            dispatch(toggleLoader())
           }
         })
         return true
@@ -59,6 +62,7 @@ export const startUpdatePokeList = (page, sizePerPage) => {
 
             reqData.stats.map((stat) => {
               pokeNamesList[idx][stat.stat.name] = stat.base_stat
+              return true
             })
             pokeNamesList[idx].image = reqData.sprites.front_default
 
@@ -66,6 +70,7 @@ export const startUpdatePokeList = (page, sizePerPage) => {
           })
         }
       }
+      return true
     })
   }
 }
@@ -133,11 +138,13 @@ export const startSetSearchText = (searchText) => {
 
           reqData.stats.map((stat) => {
             newPokeList[pokemon.id - 1][stat.stat.name] = stat.base_stat
+            return true
           })
           newPokeList[pokemon.id - 1].image = reqData.sprites.front_default
           dispatch(updatePokeList(newPokeList))
         })
       }
+      return true
     })
   }
 }
@@ -160,5 +167,11 @@ export const listLengthUpdate = (listLength) => {
   return {
     type: 'UPDATE_LIST_LENGTH',
     listLength
+  }
+}
+
+export const toggleLoader = () => {
+  return {
+    type: 'TOGGLE_LOADER'
   }
 }

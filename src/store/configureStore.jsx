@@ -6,7 +6,8 @@ import {
   pageReducer,
   itemsPerPageReducer,
   searchTextReducer,
-  listLengthReducer
+  listLengthReducer,
+  loaderReducer
 } from '../reducers'
 
 export const configure = (initialState = {}) => {
@@ -15,7 +16,8 @@ export const configure = (initialState = {}) => {
     currentPage: pageReducer,
     itemsPerPage: itemsPerPageReducer,
     searchText: searchTextReducer,
-    listLength: listLengthReducer
+    listLength: listLengthReducer,
+    loading: loaderReducer
   })
 
   const store = redux.createStore(reducer, initialState, redux.compose(
